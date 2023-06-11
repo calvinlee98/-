@@ -1,0 +1,47 @@
+单调栈 
+顾名思义 单调栈元素在入栈的时候就是有序的  一般就是入栈的时候
+假设我们需要一个递减栈  入栈元素分别为 10，3，7，4，12
+栈为空或当前元素小于栈顶元素 则入栈 否则一直出栈，直到满足条件则入栈
+10  栈空入栈
+3  小于栈顶的10 入栈
+7  大于栈顶的3  3出栈 这个时候7小于栈顶的10 入栈
+4  小于栈顶的7 入栈
+12 大于栈顶的 4 7 10 分别将他们出栈
+最终 单调栈为 12
+
+
+
+有什么应用？
+一般应用于下一个更大元素？ 下一个更小元素？ 核心在于下一个！ 
+
+
+题目 leetcode 2487 从链表中删除节点
+给你一个链表的头节点 head 。
+
+对于列表中的每个节点 node ，如果其右侧存在一个具有 严格更大 值的节点，则移除 node 。
+
+返回修改后链表的头节点 head 。
+
+我们用一个单调递减栈保存链表节点，如果入栈的时候，当前元素比栈顶元素大，说明栈顶元素右边有更大值，那么它就应该出栈（不保存，右侧存在一个 严格更大 值的节点）
+
+
+  public ListNode removeNodes(ListNode head) {
+        LinkedList<ListNode> stack = new LinkedList();
+        ListNode index = head;
+        while(index != null){
+            while(!stack.isEmpty()&&stack.getLast().val<index.val){
+                stack.removeLast();
+            }
+            stack.addLast(index);
+            index = index.next;
+        }
+        ListNode res = new ListNode();
+        index = res;
+        Iterator<ListNode> it = stack.iterator();
+        while(it.hasNext()){
+            index.next = it.next();
+            index = index.next;
+        }
+        return res.next;
+    }
+ 
